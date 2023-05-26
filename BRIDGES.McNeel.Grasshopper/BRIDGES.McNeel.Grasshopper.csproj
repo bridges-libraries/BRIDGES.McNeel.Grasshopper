@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<Title>BRIDGES.McNeel.Grasshopper</Title>
+		<Authors>École des Ponts ParisTech</Authors>
+		<Company>École des Ponts ParisTech</Company>
+
+		<Description>Tools from the Build'in platform for the integration of BRIDGES framework within Grasshopper.</Description>
+
+		<TargetFramework>net4.8</TargetFramework>
+		<OutputType>Library</OutputType>
+
+		<RepositoryUrl>https://github.com/bridges-libraries/BRIDGES.McNeel.Grasshopper</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<IncludeSymbols>true</IncludeSymbols>
+
+		<PackageId>BRIDGES.McNeel.Grasshopper</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BRIDGES.McNeel.Rhino" Version="0.1.0" />
+		<PackageReference Include="Grasshopper" Version="7.29.23107.3001" />
+	</ItemGroup>
+
+</Project>
