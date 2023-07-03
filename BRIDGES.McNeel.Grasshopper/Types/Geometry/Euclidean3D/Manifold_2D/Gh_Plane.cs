@@ -84,7 +84,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Plane(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Plane(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -109,7 +109,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Plane originating at {this.Value.Origin}, normal to {this.Value.Normal}.");
+            return $"Plane (O:{this.Value.Origin}, N:{this.Value.Normal})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>

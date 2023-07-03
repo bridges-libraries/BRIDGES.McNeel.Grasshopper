@@ -42,15 +42,6 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
         /// <summary>
         /// Creates a new instance of <see cref="Param_Vector"/>.
         /// </summary>
-        public Param_Vector()
-          : base("Vector", "Vector", "Contains a collection of vectors in a three-dimensional euclidean space.", "BRIDGES Basics", "Parameters", GH_Kernel.GH_ParamAccess.item)
-        {
-            this.Hidden = false;
-        }
-
-        /// <summary>
-        /// Creates a new instance of <see cref="Param_Vector"/>.
-        /// </summary>
         /// <param name="category"> The name of the grasshopper library.</param>
         /// <param name="subCategory"> The name of the section containing the parameter.</param>
         public Param_Vector(string category, string subCategory)
@@ -88,7 +79,7 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
                         var item = branch[i_I];
                         if (item != null)
                         {
-                            Draw.Vector(args.Display, item.Value, isSelected);
+                            Draw.Wireframe.Vector(args.Display, item.Value, isSelected);
                         }
                     }
                 }
@@ -118,13 +109,13 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
             get
             {
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                
+
                 // The image must be an embedded resource to be accessed in this way
                 System.IO.Stream stream = assembly.GetManifestResourceStream("BRIDGES.McNeel.Grasshopper.Resources.Geometry.Euclidean3D." + "Param_Vector.png");
 
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream);
 
-                return bmp; 
+                return bmp;
             }
         }
 

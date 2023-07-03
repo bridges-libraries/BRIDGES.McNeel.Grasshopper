@@ -81,7 +81,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Segment(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Segment(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Segment starting at {this.Value.StartPoint}, ending at {this.Value.EndPoint}.");
+            return $"Segment (S:{this.Value.StartPoint}, E:{this.Value.EndPoint})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -132,32 +132,68 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
                 return true;
             }
+            // Cast a Euc3D.Polyline to a Gh_Segment
+            if(typeof(Euc3D.Polyline).IsAssignableFrom(type))
+            {
+                Euc3D.Polyline polyline = (Euc3D.Polyline)source;
+                if(polyline.VertexCount == 2)
+                {
+                    this.Value = new Euc3D.Segment(polyline[0], polyline[2]);
 
+                    return true;
+                }
+            }
 
             /******************** Rhino Objects ********************/
 
             // Cast a RH_Geo.Line to a Gh_Segment
             if (typeof(RH_Geo.Line).IsAssignableFrom(type))
             {
-                RH_Geo.Line rh_Line = (RH_Geo.Line)source;
-
-                rh_Line.CastTo(out Euc3D.Segment segment);
+                ((RH_Geo.Line)source).CastTo(out Euc3D.Segment segment);
                 this.Value = segment;
 
                 return true;
             }
             // Cast a RH_Geo.LineCurve to a Gh_Segment
-            else if (typeof(RH_Geo.LineCurve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.LineCurve).IsAssignableFrom(type))
             {
-                RH_Geo.LineCurve rh_LineCurve = (RH_Geo.LineCurve)source;
-
-                rh_LineCurve.CastTo(out Euc3D.Segment segment);
+                ((RH_Geo.LineCurve)source).CastTo(out Euc3D.Segment segment);
                 this.Value = segment;
 
                 return true;
             }
+            // Cast a RH_Geo.Polyline to a Gh_Segment
+            if (typeof(RH_Geo.Polyline).IsAssignableFrom(type))
+            {
+                RH_Geo.Polyline Polyline = (RH_Geo.Polyline)source;
+
+                if (Polyline.Count == 2)
+                {
+                    Polyline[0].CastTo(out Euc3D.Point start);
+                    Polyline[1].CastTo(out Euc3D.Point end);
+
+                    this.Value = new Euc3D.Segment(start, end);
+
+                    return true;
+                }
+            }
+            // Cast a RH_Geo.Polyline to a Gh_Segment
+            if (typeof(RH_Geo.PolylineCurve).IsAssignableFrom(type))
+            {
+                RH_Geo.Polyline Polyline = ((RH_Geo.PolylineCurve)source).ToPolyline();
+
+                if (Polyline.Count == 2)
+                {
+                    Polyline[0].CastTo(out Euc3D.Point start);
+                    Polyline[1].CastTo(out Euc3D.Point end);
+
+                    this.Value = new Euc3D.Segment(start, end);
+
+                    return true;
+                }
+            }
             // Cast a RH_Geo.Curve to a Gh_Segment
-            else if (typeof(RH_Geo.Curve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.Curve).IsAssignableFrom(type))
             {
                 RH_Geo.Curve rh_Curve = (RH_Geo.Curve)source;
 
@@ -173,27 +209,44 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Cast a Gh_Polyline to a Gh_Segment
+            if (typeof(Gh_Polyline).IsAssignableFrom(type))
+            {
+                Gh_Polyline gh_Polyine = (Gh_Polyline)source;
+
+                if (gh_Polyine.Value.VertexCount == 2)
+                {
+                    this.Value = new Euc3D.Segment(gh_Polyine.Value[0], gh_Polyine.Value[1]);
+
+                    return true;
+                }
+                
+            }
+
+
             /******************** Grasshopper Objects ********************/
 
             // Cast a GH_Types.GH_Line to a Gh_Segment
             if (typeof(GH_Types.GH_Line).IsAssignableFrom(type))
             {
-                RH_Geo.Line rh_Line = ((GH_Types.GH_Line)source).Value;
+                GH_Types.GH_Line gh_Line = (GH_Types.GH_Line)source;
 
-                rh_Line.CastTo(out Euc3D.Segment segment);
+                gh_Line.Value.CastTo(out Euc3D.Segment segment);
                 this.Value = segment;
 
                 return true;
             }
             // Cast a GH_Types.GH_Curve to a Gh_Segment
-            else if (typeof(GH_Types.GH_Curve).IsAssignableFrom(type))
+            if (typeof(GH_Types.GH_Curve).IsAssignableFrom(type))
             {
-                RH_Geo.Curve rh_Curve = ((GH_Types.GH_Curve)source).Value;
+                GH_Types.GH_Curve gh_Curve = (GH_Types.GH_Curve)source;
 
-                if (rh_Curve.IsLinear())
+                if (gh_Curve.Value.IsLinear())
                 {
-                    rh_Curve.PointAtStart.CastTo(out Euc3D.Point start);
-                    rh_Curve.PointAtEnd.CastTo(out Euc3D.Point end);
+                    gh_Curve.Value.PointAtStart.CastTo(out Euc3D.Point start);
+                    gh_Curve.Value.PointAtEnd.CastTo(out Euc3D.Point end);
 
                     this.Value = new Euc3D.Segment(start, end);
 
@@ -215,11 +268,17 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a Gh_Segment to a Euc3D.Segment
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Segment)))
             {
-                object segment = this.Value;
-                target = (T)segment;
+                target = (T)(object)this.Value;
                 return true;
             }
+            // Casts a Gh_Segment to a Euc3D.Polyline
+            if (typeof(T).IsAssignableFrom(typeof(Euc3D.Line)))
+            {
+                Euc3D.Polyline polyline = new Euc3D.Polyline(new Euc3D.Point[2] { this.Value.StartPoint, this.Value.EndPoint });
 
+                target = (T)(object)polyline;
+                return true;
+            }
 
             /******************** Rhino Objects ********************/
 
@@ -232,27 +291,67 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Segment to a RH_Geo.LineCurve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.LineCurve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.LineCurve)))
             {
                 this.Value.CastTo(out RH_Geo.LineCurve rh_LineCurve);
 
                 target = (T)(object)rh_LineCurve;
+
+                return true;
+            }
+            // Casts a Gh_Segment to a RH_Geo.Polyline
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Polyline)))
+            {
+                RH_Geo.Point3d[] vertices = new RH_Geo.Point3d[2];
+
+                this.Value.StartPoint.CastTo(out vertices[0]);
+                this.Value.EndPoint.CastTo(out vertices[1]);
+
+                RH_Geo.Polyline rh_Polyline = new RH_Geo.Polyline(vertices);
+
+                target = (T)(object)rh_Polyline;
+                return true;
+            }
+            // Casts a Gh_Segment to a RH_Geo.PolylineCurve
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.PolylineCurve)))
+            {
+                RH_Geo.Point3d[] vertices = new RH_Geo.Point3d[2];
+
+                this.Value.StartPoint.CastTo(out vertices[0]);
+                this.Value.EndPoint.CastTo(out vertices[1]);
+
+                RH_Geo.PolylineCurve rh_PolylineCurve = new RH_Geo.PolylineCurve(vertices);
+
+                target = (T)(object)rh_PolylineCurve;
 
                 return true;
             }
             // Casts a Gh_Segment to a RH_Geo.Curve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
             {
                 this.Value.CastTo(out RH_Geo.LineCurve rh_LineCurve);
-                target = (T)(object)rh_LineCurve;
+                target = (T)(object)(RH_Geo.Curve)rh_LineCurve;
 
                 return true;
             }
 
 
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Casts a Gh_Segment to a Gh_Polyline
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Polyline)))
+            {
+                Euc3D.Polyline polyline = new Euc3D.Polyline( new Euc3D.Point[2] { this.Value.StartPoint, this.Value.EndPoint });
+
+                Gh_Polyline gh_Polyline = new Gh_Polyline(polyline);
+                target = (T)(object)gh_Polyline;
+
+                return true;
+            }
+
             /******************** Grasshopper Objects ********************/
 
-            // Casts a Gh_Segment to a GH_Types.Gh_Line
+            // Casts a Gh_Segment to a GH_Types.GH_Line
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Line)))
             {
                 this.Value.CastTo(out RH_Geo.Line rh_Line);
@@ -263,7 +362,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Segment to a GH_Types.GH_Curve
-            else if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
             {
                 this.Value.CastTo(out RH_Geo.LineCurve rh_LineCurve);
 

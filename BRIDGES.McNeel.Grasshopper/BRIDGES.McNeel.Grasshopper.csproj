@@ -21,8 +21,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="BRIDGES.McNeel.Rhino" Version="0.1.0" />
+		<PackageReference Include="BRIDGES.McNeel.Rhino-Dev" Version="0.1.2-beta" />
 		<PackageReference Include="Grasshopper" Version="7.29.23107.3001" />
 	</ItemGroup>
 
+	<!-- To add embedded resources -->
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Geometry\Euclidean3D\*.png" /> 
+	</ItemGroup>
+	
+	
 </Project>

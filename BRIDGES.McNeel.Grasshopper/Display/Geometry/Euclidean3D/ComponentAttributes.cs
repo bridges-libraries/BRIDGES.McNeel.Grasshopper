@@ -5,7 +5,7 @@ using GH_Ker = Grasshopper.Kernel;
 using GH_Gui = Grasshopper.GUI.Canvas;
 
 
-namespace BRIDGES.McNeel.Grasshopper.Display
+namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
 {
     /// <summary>
     /// Class controling the display behaviour of <see cref="GH_Ker.GH_Component"/>
@@ -38,8 +38,8 @@ namespace BRIDGES.McNeel.Grasshopper.Display
                 GH_Gui.GH_PaletteStyle style_Locked_Standard = GH_Gui.GH_Skin.palette_locked_standard;
 
                 // Swap out palette for normal, unselected components.
-                GH_Gui.GH_Skin.palette_normal_standard = new GH_Gui.GH_PaletteStyle(ColorTranslator.FromHtml("#47B3D8"), Color.Black, Color.Black);
-                GH_Gui.GH_Skin.palette_hidden_standard = new GH_Gui.GH_PaletteStyle(Color.SteelBlue, Color.Black, Color.Black);
+                GH_Gui.GH_Skin.palette_normal_standard = new GH_Gui.GH_PaletteStyle(ColourPalette.LightBlue, Color.Black, Color.Black);
+                GH_Gui.GH_Skin.palette_hidden_standard = new GH_Gui.GH_PaletteStyle(ColourPalette.Blue, Color.Black, Color.Black);
                 GH_Gui.GH_Skin.palette_locked_standard = new GH_Gui.GH_PaletteStyle(Color.SlateGray, Color.Black, Color.Black);
 
                 base.Render(canvas, graphics, channel);

@@ -2,6 +2,7 @@
 
 using Euc3D = BRIDGES.Geometry.Euclidean3D;
 using Fv = BRIDGES.DataStructures.PolyhedralMeshes.FaceVertexMesh;
+using He = BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh;
 
 using RH_Geo = Rhino.Geometry;
 
@@ -92,7 +93,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Mesh(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Mesh(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -117,7 +118,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"FvMesh with {Value.VertexCount} vertices, {Value.EdgeCount} edges, {Value.FaceCount} faces,");
+            return $"FvMesh (V:{Value.VertexCount}, E:{Value.EdgeCount}, F:{Value.FaceCount})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -136,10 +137,17 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
             /******************** BRIDGES Objects ********************/
 
-            // Cast a Fv.FvMesh<Euc3D.Point> to a Gh_FvMesh
+            // Cast a Fv.Mesh<Euc3D.Point> to a Gh_FvMesh
             if (typeof(Fv.Mesh<Euc3D.Point>).IsAssignableFrom(type))
             {
                 Value = (Fv.Mesh<Euc3D.Point>)source;
+                return true;
+            }
+            // Cast a He.Mesh<Euc3D.Point> to a Gh_FvMesh
+            if (typeof(He.Mesh<Euc3D.Point>).IsAssignableFrom(type))
+            {
+                He.Mesh<Euc3D.Point> heMesh = (He.Mesh<Euc3D.Point>)source;
+                Value = heMesh.ToFaceVertexMesh();
                 return true;
             }
 
@@ -153,6 +161,18 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
                 rh_Mesh.CastTo(out Fv.Mesh<Euc3D.Point> mesh);
                 Value = mesh;
+
+                return true;
+            }
+
+
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Cast a Gh_HeMesh to a Gh_FvMesh
+            if (typeof(Gh_HeMesh).IsAssignableFrom(type))
+            {
+                He.Mesh<Euc3D.Point> heMesh = ((Gh_HeMesh)source).Value;
+                Value = heMesh.ToFaceVertexMesh();
 
                 return true;
             }
@@ -182,14 +202,21 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         {
             /******************** BRIDGES Objects ********************/
 
-            // Casts a Gh_FvMesh to a Fv.FvMesh<Euc3D.Point>
+            // Casts a Gh_FvMesh to a Fv.Mesh<Euc3D.Point>
             if (typeof(T).IsAssignableFrom(typeof(Fv.Mesh<Euc3D.Point>)))
             {
                 object mesh = this.Value;
                 target = (T)mesh;
                 return true;
             }
-
+            // Casts a Gh_FvMesh to a He.Mesh<Euc3D.Point>
+            if (typeof(T).IsAssignableFrom(typeof(He.Mesh<Euc3D.Point>)))
+            {
+                Fv.Mesh<Euc3D.Point> fvMesh = this.Value;
+                He.Mesh<Euc3D.Point> heMesh = fvMesh.ToHalfedgeMesh();
+                target = (T)(object)heMesh;
+                return true;
+            }
 
             /******************** Rhino Objects ********************/
 
@@ -199,6 +226,21 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 this.Value.CastTo(out RH_Geo.Mesh rh_Mesh);
 
                 target = (T)(object)rh_Mesh;
+                return true;
+            }
+
+
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Casts a Gh_FvMesh to a Gh_HeMesh
+            if (typeof(T).IsAssignableFrom(typeof(Gh_HeMesh)))
+            {
+                Fv.Mesh<Euc3D.Point> fvMesh = this.Value;
+                He.Mesh<Euc3D.Point> heMesh = fvMesh.ToHalfedgeMesh();
+
+                Gh_HeMesh gh_HeMesh = new Gh_HeMesh(heMesh);
+                target = (T)(object)gh_HeMesh;
+
                 return true;
             }
 

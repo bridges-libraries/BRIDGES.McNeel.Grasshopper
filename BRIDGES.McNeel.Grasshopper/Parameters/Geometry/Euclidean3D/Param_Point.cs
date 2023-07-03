@@ -8,7 +8,7 @@ using GH_Kernel = Grasshopper.Kernel;
 
 using BRIDGES.McNeel.Grasshopper.Display;
 using BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D;
-
+using System.Runtime.CompilerServices;
 
 namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
 {
@@ -37,16 +37,7 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
         #endregion
 
         #region Constructors
-
-        /// <summary>
-        /// Creates a new instance of <see cref="Param_Point"/>.
-        /// </summary>
-        public Param_Point()
-          : base("Point", "Point", "Contains a collection of points in a three-dimensional euclidean space.", "BRIDGES Basics", "Parameters", GH_Kernel.GH_ParamAccess.item)
-        {
-            this.Hidden = false;
-        }
-
+        
         /// <summary>
         /// Creates a new instance of <see cref="Param_Point"/>.
         /// </summary>
@@ -87,7 +78,7 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
                         var point = branch[i];
                         if (point != null)
                         {
-                            Draw.Point(args.Display, point.Value, isSelected);
+                            Draw.Wireframe.Point(args.Display, point.Value, isSelected);
                         }
                     }
                 }
@@ -117,13 +108,13 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
             get
             {
                 System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
-                
+
                 // The image must be an embedded resource to be accessed in this way
                 System.IO.Stream stream = assembly.GetManifestResourceStream("BRIDGES.McNeel.Grasshopper.Resources.Geometry.Euclidean3D." + "Param_Point.png");
 
                 System.Drawing.Bitmap bmp = new System.Drawing.Bitmap(stream);
 
-                return bmp; 
+                return bmp;
             }
         }
 

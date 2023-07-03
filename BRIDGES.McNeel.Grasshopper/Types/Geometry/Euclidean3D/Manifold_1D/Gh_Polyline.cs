@@ -80,7 +80,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Polyline(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Polyline(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Polyline starting at {this.Value.StartPoint}, ending at {this.Value.EndPoint}.");
+            return this.Value.IsClosed ? $"Closed Polyline (V:{this.Value.VertexCount}" : $"Open Polyline (V:{this.Value.VertexCount}";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -145,7 +145,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Cast a RH_Geo.PolylineCurve to a Gh_Polyline
-            else if (typeof(RH_Geo.PolylineCurve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.PolylineCurve).IsAssignableFrom(type))
             {
                 RH_Geo.PolylineCurve rh_PolylineCurve = (RH_Geo.PolylineCurve)source;
 
@@ -155,7 +155,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Cast a RH_Geo.Curve to a Gh_Polyline
-            else if (typeof(RH_Geo.Curve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.Curve).IsAssignableFrom(type))
             {
                 RH_Geo.Curve rh_Curve = (RH_Geo.Curve)source;
 
@@ -216,7 +216,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Polyline to a RH_Geo.Polyline
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.PolylineCurve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.PolylineCurve)))
             {
                 this.Value.CastTo(out RH_Geo.PolylineCurve rh_PolylineCurve);
 
@@ -224,7 +224,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Polyline to a RH_Geo.Curve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
             {
                 this.Value.CastTo(out RH_Geo.PolylineCurve rh_PolylineCurve);
 

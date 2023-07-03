@@ -79,7 +79,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Sphere(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Sphere(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Sphere centred at {this.Value.Centre}, of radius {this.Value.Radius}.");
+            return $"Sphere (O:{this.Value.Centre}, R:{this.Value.Radius})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -256,7 +256,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Sphere to a GH_Types.GH_Surface
-            else if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Brep)))
+            if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Brep)))
             {
                 this.Value.CastTo(out RH_Geo.Sphere rh_Sphere);
                 RH_Geo.Brep rh_Brep = rh_Sphere.ToBrep();

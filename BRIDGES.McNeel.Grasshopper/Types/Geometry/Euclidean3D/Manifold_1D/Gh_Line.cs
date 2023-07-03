@@ -84,7 +84,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Line(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Line(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -109,7 +109,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Line starting at {this.Value.Origin}, parallel to {this.Value.Axis}.");
+            return $"Line (O:{this.Value.Origin}, V:{this.Value.Axis})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -132,34 +132,38 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             if (typeof(Euc3D.Line).IsAssignableFrom(type))
             {
                 this.Value = (Euc3D.Line)source;
+
                 return true;
             }
+            // Cast a Euc3D.Ray to a Gh_Line
+            if (typeof(Euc3D.Ray).IsAssignableFrom(type))
+            {
+                Euc3D.Ray ray = (Euc3D.Ray)source;
+                this.Value = new Euc3D.Line(ray.Origin, ray.Axis);
 
+                return true;
+            }
 
             /******************** Rhino Objects ********************/
 
             // Cast a RH_Geo.Line to a Gh_Line
             if (typeof(RH_Geo.Line).IsAssignableFrom(type))
             {
-                RH_Geo.Line rh_Line = (RH_Geo.Line)source;
-
-                rh_Line.CastTo(out Euc3D.Line line);
+                ((RH_Geo.Line)source).CastTo(out Euc3D.Line line);
                 this.Value = line;
 
                 return true;
             }
             // Cast a RH_Geo.LineCurve to a Gh_Line
-            else if (typeof(RH_Geo.LineCurve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.LineCurve).IsAssignableFrom(type))
             {
-                RH_Geo.LineCurve rh_LineCurve = (RH_Geo.LineCurve)source;
-
-                rh_LineCurve.CastTo(out Euc3D.Line line);
+                ((RH_Geo.LineCurve)source).CastTo(out Euc3D.Line line);
                 this.Value = line;
 
                 return true;
             }
             // Cast a RH_Geo.Curve to a Gh_Line
-            else if(typeof(RH_Geo.Curve).IsAssignableFrom(type))
+            if(typeof(RH_Geo.Curve).IsAssignableFrom(type))
             {
                 RH_Geo.Curve rh_Curve = (RH_Geo.Curve)source;
 
@@ -175,27 +179,40 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Cast a Gh_Ray to a Gh_Line
+            if (typeof(Gh_Ray).IsAssignableFrom(type))
+            {
+                Gh_Ray gh_Ray = (Gh_Ray)source;
+
+                this.Value = new Euc3D.Line(gh_Ray.Value.Origin, gh_Ray.Value.Axis);
+
+                return true;
+            }
+
+
             /******************** Grasshopper Objects ********************/
 
             // Cast a GH_Types.GH_Line to a Gh_Line
             if (typeof(GH_Types.GH_Line).IsAssignableFrom(type))
             {
-                RH_Geo.Line rh_Line = ((GH_Types.GH_Line)source).Value;
+                GH_Types.GH_Line gh_Line = (GH_Types.GH_Line)source;
 
-                rh_Line.CastTo(out Euc3D.Line line);
+                gh_Line.Value.CastTo(out Euc3D.Line line);
                 this.Value = line;
 
                 return true;
             }
             // Cast a GH_Types.GH_Curve to a Gh_Curve
-            else if (typeof(GH_Types.GH_Curve).IsAssignableFrom(type))
+            if (typeof(GH_Types.GH_Curve).IsAssignableFrom(type))
             {
-                RH_Geo.Curve rh_Curve = ((GH_Types.GH_Curve)source).Value;
+                GH_Types.GH_Curve gh_Curve = (GH_Types.GH_Curve)source;
 
-                if (rh_Curve.IsLinear())
+                if (gh_Curve.Value.IsLinear())
                 {
-                    rh_Curve.PointAtStart.CastTo(out Euc3D.Point start);
-                    rh_Curve.PointAtEnd.CastTo(out Euc3D.Point end);
+                    gh_Curve.Value.PointAtStart.CastTo(out Euc3D.Point start);
+                    gh_Curve.Value.PointAtEnd.CastTo(out Euc3D.Point end);
 
                     this.Value = new Euc3D.Line(start, end);
 
@@ -217,11 +234,17 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a Gh_Line to a Euc3D.Line
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Line)))
             {
-                object line = this.Value;
-                target = (T)line;
+                target = (T)(object)this.Value;
                 return true;
             }
+            // Casts a Gh_Line to a Euc3D.Ray
+            if (typeof(T).IsAssignableFrom(typeof(Euc3D.Ray)))
+            {
+                Euc3D.Ray ray = new Euc3D.Ray(this.Value.Origin, this.Value.Axis);
 
+                target = (T)(object)ray;
+                return true;
+            }
 
             /******************** Rhino Objects ********************/
 
@@ -234,7 +257,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Line to a RH_Geo.LineCurve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.LineCurve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.LineCurve)))
             {
                 this.Value.CastTo(out RH_Geo.LineCurve rh_LineCurve);
 
@@ -243,7 +266,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Line to a RH_Geo.Curve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
             {
                 this.Value.CastTo(out RH_Geo.LineCurve rh_LineCurve);
                 target = (T)(object)rh_LineCurve;
@@ -252,9 +275,23 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Casts a Gh_Line to a Gh_Ray
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Ray)))
+            {
+                Euc3D.Ray ray = new Euc3D.Ray(this.Value.Origin, this.Value.Axis);
+
+                Gh_Ray gh_Ray = new Gh_Ray(ray);
+                target = (T)(object)gh_Ray;
+
+                return true;
+            }
+
+
             /******************** Grasshopper Objects ********************/
 
-            // Casts a Gh_Line to a GH_Types.Gh_Line
+            // Casts a Gh_Line to a GH_Types.GH_Line
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Line)))
             {
                 this.Value.CastTo(out RH_Geo.Line rh_Line);
@@ -265,7 +302,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Line to a GH_Types.GH_Curve
-            else if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
             {
                 this.Value.CastTo(out RH_Geo.LineCurve rh_LineCurve);
 

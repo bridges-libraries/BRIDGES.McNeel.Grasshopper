@@ -79,7 +79,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Vector(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Vector(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -104,7 +104,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"({Value.X},{Value.Y},{Value.Z})");
+            return $"({Value.X}, {Value.Y}, {Value.Z})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -132,7 +132,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Cast a Euc3D.Point to a Gh_Vector
-            else if (typeof(Euc3D.Point).IsAssignableFrom(type))
+            if (typeof(Euc3D.Point).IsAssignableFrom(type))
             {
                 this.Value = (Euc3D.Point)source;
 
@@ -145,19 +145,15 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a RH_Geo.Vector3d to a Gh_Vector
             if (typeof(RH_Geo.Vector3d).IsAssignableFrom(type))
             {
-                RH_Geo.Vector3d rh_Point = (RH_Geo.Vector3d)source;
-
-                rh_Point.CastTo(out Euc3D.Vector vector);
+                ((RH_Geo.Vector3d)source).CastTo(out Euc3D.Vector vector);
                 this.Value = vector;
 
                 return true;
             }
             // Casts a RH_Geo.Point3d to a Gh_Vector
-            else if (typeof(RH_Geo.Point3d).IsAssignableFrom(type))
+            if (typeof(RH_Geo.Point3d).IsAssignableFrom(type))
             {
-                RH_Geo.Point3d rh_Point = (RH_Geo.Point3d)source;
-
-                rh_Point.CastTo(out Euc3D.Point point);
+                ((RH_Geo.Point3d)source).CastTo(out Euc3D.Point point);
                 this.Value = (Euc3D.Vector)point;
 
                 return true;
@@ -169,9 +165,9 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a Gh_Point to a Gh_Vector
             if (typeof(Gh_Point).IsAssignableFrom(type))
             {
-                Euc3D.Point point = ((Gh_Point)source).Value;
+                Gh_Point gh_Point = (Gh_Point)source;
 
-                this.Value = (Euc3D.Vector)point;
+                this.Value = (Euc3D.Vector)gh_Point.Value;
 
                 return true;
             }
@@ -182,19 +178,19 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a GH_Types.GH_Vector to a Gh_Vector
             if (typeof(GH_Types.GH_Vector).IsAssignableFrom(type))
             {
-                RH_Geo.Vector3d rh_Vector = ((GH_Types.GH_Vector)source).Value;
+                GH_Types.GH_Vector gh_Vector = (GH_Types.GH_Vector)source;
 
-                rh_Vector.CastTo(out Euc3D.Vector vector);
+                gh_Vector.Value.CastTo(out Euc3D.Vector vector);
                 this.Value = vector;
 
                 return true;
             }
             // Casts a GH_Types.GH_Point to a Gh_Vector
-            else if (typeof(GH_Types.GH_Point).IsAssignableFrom(type))
+            if (typeof(GH_Types.GH_Point).IsAssignableFrom(type))
             {
-                RH_Geo.Point3d rh_Point = ((GH_Types.GH_Point)source).Value;
+                GH_Types.GH_Point gh_Point = (GH_Types.GH_Point)source;
 
-                rh_Point.CastTo(out Euc3D.Point point);
+                gh_Point.Value.CastTo(out Euc3D.Point point);
                 this.Value = (Euc3D.Vector)point;
 
                 return true;
@@ -214,13 +210,12 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a Gh_Vector to a Euc3D.Vector
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Vector)))
             {
-                object vector = this.Value;
-                target = (T)vector;
+                target = (T)(object)this.Value;
 
                 return true;
             }
             // Casts a Gh_Vector to a Euc3D.Point
-            else if (typeof(T).IsAssignableFrom(typeof(Euc3D.Point)))
+            if (typeof(T).IsAssignableFrom(typeof(Euc3D.Point)))
             {
                 object point = (Euc3D.Point)this.Value;
                 target = (T)point;
@@ -241,7 +236,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Vector to a RH_Geo.Point3d
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Point3d)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Point3d)))
             {
                 this.Value.CastTo(out RH_Geo.Vector3d rh_Vector);
 
@@ -277,12 +272,11 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Vector to a GH_Types.GH_Point
-            else if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Point)))
+            if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Point)))
             {
                 this.Value.CastTo(out RH_Geo.Vector3d rh_Vector);
 
-                RH_Geo.Point3d rh_Point = (RH_Geo.Point3d)rh_Vector;
-                GH_Types.GH_Point gh_Point = new GH_Types.GH_Point(rh_Point);
+                GH_Types.GH_Point gh_Point = new GH_Types.GH_Point((RH_Geo.Point3d)rh_Vector);
                 target = (T)(object)gh_Point;
 
                 return true;

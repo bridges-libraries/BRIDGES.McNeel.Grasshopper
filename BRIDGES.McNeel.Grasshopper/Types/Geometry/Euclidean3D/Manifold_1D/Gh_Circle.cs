@@ -80,7 +80,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Circle(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Circle(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -105,7 +105,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Circle of radius {this.Value.Radius}, centered at {this.Value.Centre}.");
+            return $"Circle (O:{this.Value.Centre}, R:{this.Value.Radius})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -146,7 +146,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Cast a RH_Geo.Arc to a Gh_Circle
-            else if (typeof(RH_Geo.Arc).IsAssignableFrom(type))
+            if (typeof(RH_Geo.Arc).IsAssignableFrom(type))
             {
                 RH_Geo.Arc rh_Arc= (RH_Geo.Arc)source;
 
@@ -159,7 +159,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 }
             }
             // Cast a RH_Geo.ArcCurve to a Gh_Circle
-            else if (typeof(RH_Geo.ArcCurve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.ArcCurve).IsAssignableFrom(type))
             {
                 RH_Geo.ArcCurve rh_ArcCurve = (RH_Geo.ArcCurve)source;
 
@@ -172,7 +172,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 }
             }
             // Cast a RH_Geo.Curve to a Gh_Circle
-            else if (typeof(RH_Geo.Curve).IsAssignableFrom(type))
+            if (typeof(RH_Geo.Curve).IsAssignableFrom(type))
             {
                 RH_Geo.Curve rh_Curve = (RH_Geo.Curve)source;
 
@@ -199,7 +199,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Cast a GH_Types.GH_Arc to a Gh_Circle
-            else if (type == typeof(GH_Types.GH_Arc))
+            if (type == typeof(GH_Types.GH_Arc))
             {
                 RH_Geo.Arc rh_Arc = ((GH_Types.GH_Arc)source).Value;
 
@@ -212,7 +212,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 }
             }
             // Cast a GH_Types.GH_Curve to a Gh_Circle
-            else if (type == typeof(GH_Types.GH_Curve))
+            if (type == typeof(GH_Types.GH_Curve))
             {
                 RH_Geo.Curve rh_Curve = ((GH_Types.GH_Curve)source).Value;
 
@@ -264,7 +264,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Circle to a RH_Geo.LineCurve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.ArcCurve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.ArcCurve)))
             {
                 this.Value.CastTo(out RH_Geo.ArcCurve rh_ArcCurve);
 
@@ -273,7 +273,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Circle to a RH_Geo.Curve
-            else if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Curve)))
             {
                 this.Value.CastTo(out RH_Geo.ArcCurve rh_ArcCurve);
                 target = (T)(object)rh_ArcCurve;
@@ -295,7 +295,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Circle to a GH_Types.GH_Arc
-            else if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Arc)))
+            if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Arc)))
             {
                 this.Value.CastTo(out RH_Geo.Arc rh_Arc);
 
@@ -305,7 +305,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
             // Casts a Gh_Circle to a GH_Types.GH_Curve
-            else if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
+            if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
             {
                 this.Value.CastTo(out RH_Geo.ArcCurve rh_ArcCurve);
 

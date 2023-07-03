@@ -28,7 +28,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         {
             get
             {
-                this.Value.StartPoint.CastTo(out RH_Geo.Point3d rh_Start);
+                this.Value.Origin.CastTo(out RH_Geo.Point3d rh_Start);
                 this.Value.Axis.CastTo(out RH_Geo.Vector3d rh_Direction);
 
                 return new RH_Geo.BoundingBox(rh_Start, rh_Start + rh_Direction);
@@ -81,7 +81,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.IGH_PreviewData.DrawViewportWires(GH_Kernel.GH_PreviewWireArgs)"/>
         public void DrawViewportWires(GH_Kernel.GH_PreviewWireArgs args)
         {
-            Draw.Ray(args.Pipeline, this.Value, false);
+            Draw.Wireframe.Ray(args.Pipeline, this.Value, false);
         }
 
         #endregion
@@ -106,7 +106,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
         {
-            return string.Format($"Ray starting at {this.Value.StartPoint}, parallel to {this.Value.Axis}.");
+            return $"Ray (O:{this.Value.Origin}, V:{this.Value.Axis})";
         }
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.Duplicate"/>
@@ -131,6 +131,14 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 this.Value = (Euc3D.Ray)source;
                 return true;
             }
+            // Cast a Euc3D.Line to a Gh_Ray
+            if (typeof(Euc3D.Segment).IsAssignableFrom(type))
+            {
+                Euc3D.Line line = (Euc3D.Line)source;
+                this.Value = new Euc3D.Ray(line.Origin, line.Axis);
+
+                return true;
+            }
 
 
             /******************** Rhino Objects ********************/
@@ -138,14 +146,24 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Cast a RH_Geo.Ray3d to a Gh_Ray
             if (typeof(RH_Geo.Ray3d).IsAssignableFrom(type))
             {
-                RH_Geo.Ray3d rh_Ray = (RH_Geo.Ray3d)source;
-
-                rh_Ray.CastTo(out Euc3D.Ray ray);
+                ((RH_Geo.Ray3d)source).CastTo(out Euc3D.Ray ray);
                 this.Value = ray;
 
                 return true;
             }
 
+
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Cast a Gh_Line to a Gh_Ray
+            if (typeof(Gh_Line).IsAssignableFrom(type))
+            {
+                Gh_Line gh_Line = (Gh_Line)source;
+
+                this.Value = new Euc3D.Ray(gh_Line.Value.Origin, gh_Line.Value.Axis);
+
+                return true;
+            }
 
             /******************** Grasshopper Objects ********************/
 
@@ -164,8 +182,15 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             // Casts a Gh_Ray to a Euc3D.Ray
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Ray)))
             {
-                object segment = this.Value;
-                target = (T)segment;
+                target = (T)(object)this.Value;
+                return true;
+            }
+            // Casts a Gh_Ray to a Euc3D.Line
+            if (typeof(T).IsAssignableFrom(typeof(Euc3D.Segment)))
+            {
+                Euc3D.Line segment = new Euc3D.Line(this.Value.Origin, this.Value.Axis);
+
+                target = (T)(object)segment;
                 return true;
             }
 
@@ -178,6 +203,20 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 this.Value.CastTo(out RH_Geo.Ray3d rh_Ray3d);
 
                 target = (T)(object)rh_Ray3d;
+                return true;
+            }
+
+
+            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+
+            // Casts a Gh_Ray to a Gh_Line
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Line)))
+            {
+                Euc3D.Line line = new Euc3D.Line(this.Value.Origin, this.Value.Axis);
+
+                Gh_Line gh_Line = new Gh_Line(line);
+                target = (T)(object)gh_Line;
+
                 return true;
             }
 
