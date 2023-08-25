@@ -3,14 +3,14 @@ using System.Drawing;
 
 using GH_Ker = Grasshopper.Kernel;
 using GH_Gui = Grasshopper.GUI.Canvas;
-using Rhino.UI;
+
 
 namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
 {
     /// <summary>
     /// Class controling the display behaviour of <see cref="GH_Ker.GH_Param{T}"/>
     /// </summary>
-    internal class ParameterAttributes : GH_Ker.Attributes.GH_FloatingParamAttributes
+    public class ParameterAttributes : GH_Ker.Attributes.GH_FloatingParamAttributes
     {
         #region Constructors
 
@@ -28,6 +28,12 @@ namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
 
         #region Other Methods
 
+        /// <summary>
+        /// Method defining the render settings of the parameter.
+        /// </summary>
+        /// <param name="canvas"> Canvas in which the parameter is displayed. </param>
+        /// <param name="graphics"> Graphic controls. </param>
+        /// <param name="channel"> Drawing channels handled inside the Grasshopper canvas.</param>
         protected override void Render(GH_Gui.GH_Canvas canvas, Graphics graphics, GH_Gui.GH_CanvasChannel channel)
         {
             if (channel == GH_Gui.GH_CanvasChannel.Objects)

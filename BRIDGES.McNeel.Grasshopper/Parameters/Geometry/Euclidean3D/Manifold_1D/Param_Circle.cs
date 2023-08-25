@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D;
 
@@ -6,9 +7,7 @@ using RH_Geo = Rhino.Geometry;
 
 using GH_Kernel = Grasshopper.Kernel;
 
-using BRIDGES.McNeel.Grasshopper.Display;
 using BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D;
-using System.Collections.Generic;
 
 
 namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
@@ -42,10 +41,8 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
         /// <summary>
         /// Creates a new instance of <see cref="Param_Circle"/>.
         /// </summary>
-        /// <param name="category"> The name of the grasshopper library.</param>
-        /// <param name="subCategory"> The name of the section containing the parameter.</param>
-        public Param_Circle(string category, string subCategory)
-          : base("Circle", "Circle", "Contains a collection of circles in a three-dimensional euclidean space.", category, subCategory, GH_Kernel.GH_ParamAccess.item)
+        public Param_Circle()
+          : base("Circle", "Circle", "Contains a collection of circles in a three-dimensional euclidean space.", "BRIDGES.McNeel.Grasshopper", "Parameters", GH_Kernel.GH_ParamAccess.item)
         {
             this.Hidden = false;
         }
@@ -100,7 +97,7 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.GH_DocumentObject.Exposure"/>
         public override GH_Kernel.GH_Exposure Exposure
         {
-            get { return GH_Kernel.GH_Exposure.secondary; }
+            get { return GH_Kernel.GH_Exposure.hidden; }
         }
 
         /// <inheritdoc cref="GH_Kernel.GH_DocumentObject.Icon"/>

@@ -65,7 +65,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_Plane"/> class from a <see cref="Euc3D.Plane"/>.
         /// </summary>
-        /// <param name="plane"> <see cref="Euc3D.Plane"/> to duplicate.</param>
+        /// <param name="plane"> <see cref="Euc3D.Plane"/> for the grasshopper type.</param>
         public Gh_Plane(Euc3D.Plane plane)
         {
             this.Value = plane;

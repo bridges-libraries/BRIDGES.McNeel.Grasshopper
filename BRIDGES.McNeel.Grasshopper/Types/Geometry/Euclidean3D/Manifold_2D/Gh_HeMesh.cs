@@ -74,7 +74,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_HeMesh"/> class from a <see cref="He.Mesh{TPosition}"/>.
         /// </summary>
-        /// <param name="heMesh"> <see cref="He.Mesh{TPosition}"/> to duplicate.</param>
+        /// <param name="heMesh"> <see cref="He.Mesh{TPosition}"/> for the grasshopper type.</param>
         public Gh_HeMesh(He.Mesh<Euc3D.Point> heMesh)
         {
             this.Value = (He.Mesh<Euc3D.Point>)heMesh.Clone();

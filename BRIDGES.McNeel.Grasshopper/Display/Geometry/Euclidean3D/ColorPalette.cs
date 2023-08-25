@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
 {
+    /// <summary>
+    /// Colour palette for grasshopper elements from BRIDGES.
+    /// </summary>
     public static class ColourPalette
     {
         /// <summary>

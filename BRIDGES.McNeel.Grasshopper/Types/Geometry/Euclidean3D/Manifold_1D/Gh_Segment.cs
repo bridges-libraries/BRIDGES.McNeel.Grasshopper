@@ -62,7 +62,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_Segment"/> class from a <see cref="Euc3D.Segment"/>.
         /// </summary>
-        /// <param name="line"> <see cref="Euc3D.Segment"/> to duplicate.</param>
+        /// <param name="line"> <see cref="Euc3D.Segment"/> for the grasshopper type.</param>
         public Gh_Segment(Euc3D.Segment line)
         {
             this.Value = line;

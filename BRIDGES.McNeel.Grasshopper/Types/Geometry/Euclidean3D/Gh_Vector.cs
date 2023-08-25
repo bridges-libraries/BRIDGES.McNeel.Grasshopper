@@ -60,7 +60,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_Vector"/> class from a <see cref="Euc3D.Vector"/>.
         /// </summary>
-        /// <param name="vector"> <see cref="Euc3D.Vector"/> to duplicate.</param>
+        /// <param name="vector"> <see cref="Euc3D.Vector"/> for the grasshopper type. </param>
         public Gh_Vector(Euc3D.Vector vector)
         {
             this.Value = vector;

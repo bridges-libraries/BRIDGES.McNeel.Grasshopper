@@ -7,7 +7,6 @@ using RH_Geo = Rhino.Geometry;
 
 using GH_Kernel = Grasshopper.Kernel;
 
-using BRIDGES.McNeel.Grasshopper.Display;
 using BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D;
 
 
@@ -42,10 +41,8 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
         /// <summary>
         /// Creates a new instance of <see cref="Param_Plane"/>.
         /// </summary>
-        /// <param name="category"> The name of the grasshopper library.</param>
-        /// <param name="subCategory"> The name of the section containing the parameter.</param>
-        public Param_Plane(string category, string subCategory)
-          : base("Plane", "Plane", "Contains a collection of planes in a three-dimensional euclidean space.", category, subCategory, GH_Kernel.GH_ParamAccess.item)
+        public Param_Plane()
+          : base("Plane", "Plane", "Contains a collection of planes in a three-dimensional euclidean space.", "BRIDGES.McNeel.Grasshopper", "Parameters", GH_Kernel.GH_ParamAccess.item)
         {
             this.Hidden = false;
         }
@@ -100,7 +97,7 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Kernel.GH_DocumentObject.Exposure"/>
         public override GH_Kernel.GH_Exposure Exposure
         {
-            get { return GH_Kernel.GH_Exposure.tertiary; }
+            get { return GH_Kernel.GH_Exposure.hidden; }
         }
 
         /// <inheritdoc cref="GH_Kernel.GH_DocumentObject.Icon"/>

@@ -74,7 +74,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_FvMesh"/> class from a <see cref="Fv.Mesh{TPosition}"/>.
         /// </summary>
-        /// <param name="fvMesh"> <see cref="Fv.Mesh{TPosition}"/> to duplicate.</param>
+        /// <param name="fvMesh"> <see cref="Fv.Mesh{TPosition}"/> for the grasshopper type.</param>
         public Gh_FvMesh(Fv.Mesh<Euc3D.Point> fvMesh)
         {
             this.Value = (Fv.Mesh<Euc3D.Point>)fvMesh.Clone();

@@ -236,18 +236,6 @@ namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
                         display.DrawLine(rh_Origin - (max * rh_UAxis) + (i * rh_VAxis), rh_Origin + (max * rh_UAxis) + (i * rh_VAxis), ColourPalette.Blue, 1);
                         display.DrawLine(rh_Origin + (i * rh_UAxis) - (max * rh_VAxis), rh_Origin + (i * rh_UAxis) + (max * rh_VAxis), ColourPalette.Blue, 1);
                     }
-
-                    // Bad
-                    // 0x11110000 => Full Line
-                    // 0x01001001 => Not dense enough
-                    // 0x11001100 & 0x10101010 => Big-Small pattern
-                    // 0x01111110 = > Large Dot, Samll dots
-                    // 0x01100110 => Small Dots, Large Space
-                    // 0x00110011 => Small Dotted
-                    // 0x01010101 => Larger Dotted : 
-                    //
-                    // Good
-
                 }
 
             }

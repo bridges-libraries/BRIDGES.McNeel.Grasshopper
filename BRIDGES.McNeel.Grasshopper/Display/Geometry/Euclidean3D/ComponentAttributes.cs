@@ -10,7 +10,7 @@ namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
     /// <summary>
     /// Class controling the display behaviour of <see cref="GH_Ker.GH_Component"/>
     /// </summary>
-    internal class ComponentAttributes : GH_Ker.Attributes.GH_ComponentAttributes
+    public class ComponentAttributes : GH_Ker.Attributes.GH_ComponentAttributes
     {
         #region Constructors
 
@@ -28,6 +28,12 @@ namespace BRIDGES.McNeel.Grasshopper.Display.Geometry.Euclidean3D
 
         #region Other Methods
 
+        /// <summary>
+        /// Method defining the render settings of the component.
+        /// </summary>
+        /// <param name="canvas"> Canvas in which the component is displayed. </param>
+        /// <param name="graphics"> Graphic controls. </param>
+        /// <param name="channel"> Drawing channels handled inside the Grasshopper canvas.</param>
         protected override void Render(GH_Gui.GH_Canvas canvas, Graphics graphics, GH_Gui.GH_CanvasChannel channel)
         {
             if (channel == GH_Gui.GH_CanvasChannel.Objects)

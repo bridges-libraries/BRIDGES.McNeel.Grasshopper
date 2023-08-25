@@ -60,7 +60,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_Sphere"/> class from a <see cref="Euc3D.Sphere"/>.
         /// </summary>
-        /// <param name="sphere"> <see cref="Euc3D.Sphere"/> to duplicate.</param>
+        /// <param name="sphere"> <see cref="Euc3D.Sphere"/> for the grasshopper type.</param>
         public Gh_Sphere(Euc3D.Sphere sphere)
         {
             this.Value = sphere;

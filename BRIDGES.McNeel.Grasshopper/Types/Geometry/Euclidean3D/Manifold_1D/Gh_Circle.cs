@@ -61,7 +61,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <summary>
         /// Initialises a new instance of <see cref="Gh_Segment"/> class from a <see cref="Euc3D.Circle"/>.
         /// </summary>
-        /// <param name="circle"> <see cref="Euc3D.Circle"/> to duplicate.</param>
+        /// <param name="circle"> <see cref="Euc3D.Circle"/> for the grasshopper type.</param>
         public Gh_Circle(Euc3D.Circle circle)
         {
             this.Value = circle;
