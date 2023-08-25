@@ -47,6 +47,17 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
             this.Hidden = false;
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="Param_Vector"/>.
+        /// </summary>
+        /// <param name="category"> The name of the grasshopper library. </param>
+        /// <param name="subCategory"> The name of the section containing the parameter. </param>
+        public Param_Vector(string category, string subCategory)
+          : base("Vector", "Vector", "Contains a collection of vectors in a three-dimensional euclidean space.", category, subCategory, GH_Kernel.GH_ParamAccess.item)
+        {
+            this.Hidden = false;
+        }
+
         #endregion
 
         #region Public Methods

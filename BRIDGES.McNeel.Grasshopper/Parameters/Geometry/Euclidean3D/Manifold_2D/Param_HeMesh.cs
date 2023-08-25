@@ -47,6 +47,17 @@ namespace BRIDGES.McNeel.Grasshopper.Parameters.Geometry.Euclidean3D
             this.Hidden = false;
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="Param_HeMesh"/>.
+        /// </summary>
+        /// <param name="category"> The name of the grasshopper library. </param>
+        /// <param name="subCategory"> The name of the section containing the parameter. </param>
+        public Param_HeMesh(string category, string subCategory)
+          : base("Halfedge Mesh", "HeMesh", "Contains a collection of halfedge meshes in a three-dimensional euclidean space.", category, subCategory, GH_Kernel.GH_ParamAccess.item)
+        {
+            this.Hidden = false;
+        }
+
         #endregion
 
         #region Public Methods
