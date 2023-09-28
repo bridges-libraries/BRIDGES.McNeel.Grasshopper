@@ -88,7 +88,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
         #region Override : GH_Goo<>
 
-        /********** Properties **********/
+        // ---------- Properties ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.IsValid"/>
         public override bool IsValid { get { return true; } }
@@ -100,7 +100,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         public override string TypeName { get { return nameof(Gh_Polyline); } }
 
 
-        /********** Methods **********/
+        // ---------- Methods ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
@@ -122,7 +122,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
             var type = source.GetType();
 
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Cast a Euc3D.Polyline to a Gh_Polyline
             if (typeof(Euc3D.Polyline).IsAssignableFrom(type))
@@ -132,7 +132,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Cast a RH_Geo.Polyline to a Gh_Polyline
             if (typeof(RH_Geo.Polyline).IsAssignableFrom(type))
@@ -169,7 +169,20 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
+
+            // Casts a Gh_Polyline to a Gh_Polyline
+            if (typeof(Gh_Polyline).IsAssignableFrom(type))
+            {
+                Euc3D.Polyline polyline = ((Gh_Polyline)source).Value;
+
+                this.Value = polyline;
+
+                return true;
+            }
+
+
+            // ----- Grasshopper Objects ----- //
 
             // Cast a GH_Types.GH_Curve to a Gh_Polyline
             if (typeof(GH_Types.GH_Curve).IsAssignableFrom(type))
@@ -186,7 +199,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }
@@ -194,7 +207,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.CastTo{Q}(ref Q)"/>
         public override bool CastTo<T>(ref T target)
         {
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Casts a Gh_Polyline to a Euc3D.Polyline
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Polyline)))
@@ -205,7 +218,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Casts a Gh_Polyline to a RH_Geo.Polyline
             if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Polyline)))
@@ -232,7 +245,19 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
 
-            /******************** Grasshopper Objects ********************/
+
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
+
+            // Casts a Gh_Polyline to a Gh_Polyline
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Polyline)))
+            {
+                target = (T)(object)this;
+
+                return true;
+            }
+
+
+            // ----- Grasshopper Objects ----- //
 
             // Casts a Gh_Polyline to a GH_Types.GH_Curve
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Curve)))
@@ -246,7 +271,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }

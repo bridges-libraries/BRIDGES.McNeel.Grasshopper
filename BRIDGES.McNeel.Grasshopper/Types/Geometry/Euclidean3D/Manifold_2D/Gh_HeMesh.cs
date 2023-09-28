@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Euc3D = BRIDGES.Geometry.Euclidean3D;
 using He = BRIDGES.DataStructures.PolyhedralMeshes.HalfedgeMesh;
@@ -101,7 +101,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
         #region Override : GH_Goo<>
 
-        /********** Properties **********/
+        // ---------- Properties ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.IsValid"/>
         public override bool IsValid { get { return true; } }
@@ -113,7 +113,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         public override string TypeName { get { return nameof(Gh_HeMesh); } }
 
 
-        /********** Methods **********/
+        // ---------- Methods ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
@@ -135,7 +135,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
             var type = source.GetType();
 
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Cast a He.Mesh<Euc3D.Point> to a Gh_HeMesh
             if (typeof(He.Mesh<Euc3D.Point>).IsAssignableFrom(type))
@@ -151,7 +151,8 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
 
-            /******************** Rhino Objects ********************/
+
+            // ----- Rhino Objects ----- //
 
             // Cast a RH_Geo.Mesh to a Gh_HeMesh
             if (typeof(RH_Geo.Mesh).IsAssignableFrom(type))
@@ -165,8 +166,17 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
 
+            // Casts a Gh_HeMesh to a Gh_HeMesh
+            if (typeof(Gh_HeMesh).IsAssignableFrom(type))
+            {
+                He.Mesh<Euc3D.Point> heMesh = ((Gh_HeMesh)source).Value;
+
+                this.Value = heMesh;
+
+                return true;
+            }
             // Cast a Gh_FvMesh to a Gh_HeMesh
             if (typeof(Gh_FvMesh).IsAssignableFrom(type))
             {
@@ -177,7 +187,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- Grasshopper Objects ----- //
 
             // Cast a GH_Types.GH_Mesh to a Gh_HeMesh
             if (typeof(GH_Types.GH_Mesh).IsAssignableFrom(type))
@@ -191,7 +201,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }
@@ -199,7 +209,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.CastTo{Q}(ref Q)"/>
         public override bool CastTo<T>(ref T target)
         {
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Casts a Gh_HeMesh to a He.HeMesh<Euc3D.Point>
             if (typeof(T).IsAssignableFrom(typeof(He.Mesh<Euc3D.Point>)))
@@ -217,7 +227,8 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
 
-            /******************** Rhino Objects ********************/
+
+            // ----- Rhino Objects ----- //
 
             // Casts a Gh_HeMesh to a RH_Geo.Mesh
             if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Plane)))
@@ -229,8 +240,15 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
 
+            // Casts a Gh_HeMesh to a Gh_HeMesh
+            if (typeof(T).IsAssignableFrom(typeof(Gh_HeMesh)))
+            {
+                target = (T)(object)this;
+
+                return true;
+            }
             // Casts a Gh_HeMesh to a Gh_FvMesh
             if (typeof(T).IsAssignableFrom(typeof(Gh_FvMesh)))
             {
@@ -244,7 +262,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- Grasshopper Objects ----- //
 
             // Casts a Gh_HeMesh to a GH_Types.GH_Mesh
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Mesh)))
@@ -258,7 +276,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }

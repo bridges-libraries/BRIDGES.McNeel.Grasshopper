@@ -87,7 +87,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
         #region Override : GH_Goo<>
 
-        /********** Properties **********/
+        // ---------- Properties ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.IsValid"/>
         public override bool IsValid { get { return true; } }
@@ -99,7 +99,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         public override string TypeName { get { return nameof(Gh_Sphere); } }
 
 
-        /********** Methods **********/
+        // ---------- Methods ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
@@ -121,7 +121,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
             var type = source.GetType();
 
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Cast a Euc3D.Sphere to a Gh_Sphere
             if (typeof(Euc3D.Sphere).IsAssignableFrom(type))
@@ -131,7 +131,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Cast a RH_Geo.Sphere to a Gh_Sphere
             if (typeof(RH_Geo.Sphere).IsAssignableFrom(type))
@@ -176,7 +176,20 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
+
+            // Casts a Gh_Sphere to a Gh_Sphere
+            if (typeof(Gh_Sphere).IsAssignableFrom(type))
+            {
+                Euc3D.Sphere sphere = ((Gh_Sphere)source).Value;
+
+                this.Value = sphere;
+
+                return true;
+            }
+
+
+            // ----- Grasshopper Objects ----- //
 
             // Cast a GH_Types.GH_Surface to a Gh_Sphere
             if (typeof(GH_Types.GH_Surface).IsAssignableFrom(type))
@@ -211,7 +224,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }
@@ -219,7 +232,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.CastTo{Q}(ref Q)"/>
         public override bool CastTo<T>(ref T target)
         {
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Casts a Gh_Sphere to a Euc3D.Sphere
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Sphere)))
@@ -230,7 +243,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Casts a Gh_Sphere to a RH_Geo.Sphere
             if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Sphere)))
@@ -242,7 +255,18 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
+
+            // Casts a Gh_Sphere to a Gh_Sphere
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Sphere)))
+            {
+                target = (T)(object)this;
+
+                return true;
+            }
+
+
+            // ----- Grasshopper Objects ----- //
 
             // Casts a Gh_Sphere to a GH_Types.GH_Surface
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Surface)))
@@ -267,7 +291,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
                 return true;
             }
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }

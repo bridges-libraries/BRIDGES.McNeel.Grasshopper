@@ -88,7 +88,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
         #region Override : GH_Goo<>
 
-        /********** Properties **********/
+        // ---------- Properties ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.IsValid"/>
         public override bool IsValid { get { return true; } }
@@ -100,7 +100,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         public override string TypeName { get { return nameof(Gh_Circle); } }
 
 
-        /********** Methods **********/
+        // ---------- Methods ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
@@ -122,7 +122,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
             var type = source.GetType();
 
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Cast a Euc3D.Cirle to a Gh_Circle
             if (typeof(Euc3D.Circle).IsAssignableFrom(type))
@@ -133,7 +133,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Cast a RH_Geo.Circle to a Gh_Circle
             if (typeof(RH_Geo.Circle).IsAssignableFrom(type))
@@ -186,7 +186,20 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
+
+            // Casts a Gh_Circle to a Gh_Circle
+            if (typeof(Gh_Circle).IsAssignableFrom(type))
+            {
+                Euc3D.Circle circle = ((Gh_Circle)source).Value;
+
+                this.Value = circle;
+
+                return true;
+            }
+
+
+            // ----- Grasshopper Objects ----- //
 
             // Cast a GH_Types.GH_Circle to a Gh_Circle
             if (typeof(GH_Types.GH_Circle).IsAssignableFrom(type))
@@ -226,7 +239,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }
@@ -234,7 +247,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.CastTo{Q}(ref Q)"/>
         public override bool CastTo<T>(ref T target)
         {
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Casts a Gh_Circle to a Euc3D.Circle
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Circle)))
@@ -245,7 +258,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Casts a Gh_Circle to a RH_Geo.Line
             if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Circle)))
@@ -282,7 +295,18 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
+
+            // Casts a Gh_Circle to a Gh_Circle
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Circle)))
+            {
+                target = (T)(object)this;
+
+                return true;
+            }
+
+
+            // ----- Grasshopper Objects ----- //
 
             // Casts a Gh_Circle to a GH_Types.GH_Circle
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Circle)))
@@ -316,7 +340,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }

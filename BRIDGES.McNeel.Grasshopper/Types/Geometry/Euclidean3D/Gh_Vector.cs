@@ -87,7 +87,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
 
         #region Override : GH_Goo<>
 
-        /********** Properties **********/
+        // ---------- Properties ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.IsValid"/>
         public override bool IsValid { get { return true; } }
@@ -99,7 +99,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         public override string TypeName { get { return nameof(Gh_Vector); } }
 
 
-        /********** Methods **********/
+        // ---------- Methods ---------- //
 
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.ToString"/>
         public override string ToString()
@@ -122,7 +122,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             var type = source.GetType();
 
 
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Cast a Euc3D.Vector to a Gh_Vector
             if (typeof(Euc3D.Vector).IsAssignableFrom(type))
@@ -140,7 +140,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Casts a RH_Geo.Vector3d to a Gh_Vector
             if (typeof(RH_Geo.Vector3d).IsAssignableFrom(type))
@@ -160,8 +160,17 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
 
+            // Casts a Gh_Vector to a Gh_Vector
+            if (typeof(Gh_Vector).IsAssignableFrom(type))
+            {
+                Euc3D.Vector point = ((Gh_Vector)source).Value;
+
+                this.Value = point;
+
+                return true;
+            }
             // Casts a Gh_Point to a Gh_Vector
             if (typeof(Gh_Point).IsAssignableFrom(type))
             {
@@ -173,7 +182,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- Grasshopper Objects ----- //
 
             // Casts a GH_Types.GH_Vector to a Gh_Vector
             if (typeof(GH_Types.GH_Vector).IsAssignableFrom(type))
@@ -197,7 +206,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }
@@ -205,7 +214,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
         /// <inheritdoc cref="GH_Types.GH_Goo{T}.CastTo{Q}(ref Q)"/>
         public override bool CastTo<T>(ref T target)
         {
-            /******************** BRIDGES Objects ********************/
+            // ----- BRIDGES Objects ----- //
 
             // Casts a Gh_Vector to a Euc3D.Vector
             if (typeof(T).IsAssignableFrom(typeof(Euc3D.Vector)))
@@ -224,7 +233,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Rhino Objects ********************/
+            // ----- Rhino Objects ----- //
 
             // Casts a Gh_Vector to a RH_Geo.Vector3d
             if (typeof(T).IsAssignableFrom(typeof(RH_Geo.Vector3d)))
@@ -247,8 +256,15 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** BRIDGES.McNeel.Grasshopper Objects ********************/
+            // ----- BRIDGES.McNeel.Grasshopper Objects ----- //
 
+            // Casts a Gh_Vector to a Gh_Vector
+            if (typeof(T).IsAssignableFrom(typeof(Gh_Vector)))
+            {
+                target = (T)(object)this;
+
+                return true;
+            }
             // Casts a Gh_Vector to a Gh_Point
             if (typeof(T).IsAssignableFrom(typeof(Gh_Point)))
             {
@@ -259,7 +275,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Grasshopper Objects ********************/
+            // ----- Grasshopper Objects ----- //
 
             // Casts a Gh_Vector to a GH_Types.GH_Vector
             if (typeof(T).IsAssignableFrom(typeof(GH_Types.GH_Vector)))
@@ -283,7 +299,7 @@ namespace BRIDGES.McNeel.Grasshopper.Types.Geometry.Euclidean3D
             }
 
 
-            /******************** Otherwise ********************/
+            // ----- Otherwise ----- //
 
             return false;
         }
